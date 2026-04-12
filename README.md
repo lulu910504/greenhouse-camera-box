@@ -5,7 +5,7 @@
 
 Raspberry Pi–based camera system for automated plant monitoring with remote access and API control.
 
----
+
 
 ## Overview
 
@@ -13,13 +13,12 @@ This project implements a camera monitoring system designed for greenhouse envir
 Images are captured periodically and can also be triggered remotely via API.  
 All images are stored locally and served through a web interface.
 
----
+
 
 ## System Architecture
 
 Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote Access (Tailscale)
 
----
 
 ## Hardware
 
@@ -28,7 +27,6 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote A
 - Raspberry Pi 5 CUBE Pi Case  
   https://shop.playrobot.com/products/ceo0136  
 
----
 
 ## Software Stack
 
@@ -37,7 +35,7 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote A
 - Picamera2  
 - Pillow  
 
----
+
 
 ## Features
 
@@ -49,7 +47,6 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote A
 - Dashboard integration
 - Remote access via Tailscale
 
----
 
 ## API Endpoints
 
@@ -60,7 +57,7 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote A
 | GET  | /latest_daily_photo | Get latest image |
 | POST | /ping | System health check |
 
----
+
 
 ## Tailscale (Remote Access)
 
@@ -68,7 +65,6 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote A
 
 Secure remote access without port forwarding.
 
----
 
 ## Automation (Cron)
 
