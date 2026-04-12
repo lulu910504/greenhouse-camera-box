@@ -68,6 +68,5 @@ Secure remote access without port forwarding.
 
 ## Automation (Cron)
 
-```bash
-crontab -e
+0 8 * * * python3 scripts/daily_capture.py
 
