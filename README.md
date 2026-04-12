@@ -35,4 +35,3 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 - Dashboard integration
 - Remote access via Tailscale
 
-## Project Structure
