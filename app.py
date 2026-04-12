@@ -1,0 +1,134 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os, time, threading
+from datetime import datetime
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from PIL import Image
+from fastapi.responses import FileResponse
+
+APP_ROOT = os.path.dirname(__file__)
+DAILY_DIR = os.path.join(APP_ROOT, "static", "daily_photos")
+REALTIME_DIR = os.path.join(APP_ROOT, "static", "realtime_photos")
+os.makedirs(DAILY_DIR, exist_ok=True)
+os.makedirs(REALTIME_DIR, exist_ok=True)
+
+
+from picamera2 import Picamera2
+from libcamera import controls
+
+CAMERA_SIZE = (2304, 1296)  
+#ROTATE_DEG = -90          
+ROTATE_DEG = 0 
+camera_lock = threading.Lock()
+cam = None
+CAMERA_OK = False
+
+
+def init_camera():
+    global cam, CAMERA_OK
+    try:
+        cam = Picamera2()
+        cfg = cam.create_still_configuration({"size": CAMERA_SIZE})
+        cam.configure(cfg)
+        cam.set_controls({"AfMode": controls.AfModeEnum.Continuous})
+        cam.start()
+        time.sleep(1)
+        try:
+            cam.autofocus_cycle()
+        except:
+            pass
+        CAMERA_OK = True
+    except Exception as e:
+        print("[Camera Error]", e)
+        CAMERA_OK = False
+
+init_camera()
+
+
+def capture_and_rotate(filepath):
+
+    cam.capture_file(filepath)
+    if ROTATE_DEG != 0:
+        try:
+            with Image.open(filepath) as im:
+                im = im.rotate(ROTATE_DEG, expand=True)
+                im.save(filepath)
+        except Exception as e:
+            print("[Rotate ERR]", e)
+
+
+def list_latest(folder):
+    files = sorted(
+        [f for f in os.listdir(folder) if f.lower().endswith((".jpg", ".jpeg", ".png"))],
+        key=lambda x: os.path.getmtime(os.path.join(folder, x))
+    )
+    return files
+
+
+app = FastAPI(title="RPi 5 | CM3 Wide | No GIF")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.mount("/static", StaticFiles(directory=os.path.join(APP_ROOT, "static")), name="static")
+
+
+@app.post("/ping")
+def ping():
+    return {"ok": True, "camera": CAMERA_OK}
+
+
+@app.get("/latest_daily_photo")
+def latest_daily_photo():
+    fs = list_latest(DAILY_DIR)
+    if not fs:
+        return {"filename": None}
+    return {"filename": fs[-1]}
+
+
+@app.post("/capture")
+def capture():
+
+    if not CAMERA_OK:
+        return {"success": False}
+    name = datetime.now().strftime("realtime_%Y-%m-%d_%H-%M-%S.jpg")
+    path = os.path.join(REALTIME_DIR, name)
+
+    with camera_lock:
+        try:
+            cam.autofocus_cycle()
+        except:
+            pass
+        capture_and_rotate(path)
+
+    return {"success": True, "filename": name}
+
+
+@app.post("/capture_daily")
+def capture_daily():
+
+    if not CAMERA_OK:
+        return {"success": False}
+    name = datetime.now().strftime("%Y-%m-%d_%H-%M-%S.jpg")
+    path = os.path.join(DAILY_DIR, name)
+
+    with camera_lock:
+        try:
+            cam.autofocus_cycle()
+        except:
+            pass
+        capture_and_rotate(path)
+
+    return {"success": True, "filename": name}
+@app.get("/")
+def index():
+
+    return FileResponse(os.path.join(APP_ROOT, "index.html"))
