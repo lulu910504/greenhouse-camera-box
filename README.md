@@ -46,5 +46,6 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 Start server:
 ```cpp
 uvicorn app:app --host 0.0.0.0 --port 8000
+
 <img width="1108" height="1477" alt="image" src="https://github.com/user-attachments/assets/77e531ca-5ce0-4263-9bb0-76e7420ed961" />
 
