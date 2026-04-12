@@ -102,6 +102,7 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 ```
+
 Enable and start service:
 ```bash
 sudo systemctl daemon-reload
