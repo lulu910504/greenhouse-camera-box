@@ -16,7 +16,6 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 
 - Raspberry Pi 5
 - Camera Module 3 Wide
-- Tripod-mounted camera enclosure
 
 ## Software Stack
 
