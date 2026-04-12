@@ -1,4 +1,5 @@
 # Greenhouse Camera System
+<img width="888" height="666" alt="image" src="https://github.com/user-attachments/assets/cae8f1d8-9edc-45e6-a767-127bc8aae625" />
 
 Raspberry Pi–based camera system for automated plant monitoring with remote access and API control.
 
@@ -16,7 +17,7 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 
 - Raspberry Pi 5
 - Camera Module 3 Wide
-
+- Case https://shop.playrobot.com/products/ceo0136
 ## Software Stack
 
 - Python
