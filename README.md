@@ -34,4 +34,5 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 - REST API for remote control
 - Dashboard integration
 - Remote access via Tailscale
+<img width="1108" height="1477" alt="image" src="https://github.com/user-attachments/assets/77e531ca-5ce0-4263-9bb0-76e7420ed961" />
 
