@@ -1,0 +1,197 @@
+<!-- tailscale -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPi Camera Interface</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .row {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .container {
+      flex: 1;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    h2 { text-align: center; }
+
+    .photo-area { text-align: center; }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+
+    h1 {
+      margin-top: 30px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 760px;
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #e6e6e6;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .media {
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      background: #fff;
+    }
+
+    .media img {
+      width: 100%;
+      max-height: 78vh;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .caption {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      padding: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 900px) {
+      .row { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="row">
+
+    <!-- Daily Photo -->
+    <div class="container">
+      <h2>Daily Photo</h2>
+      <p>The scheduled daily capture will appear here.</p>
+      <div class="photo-area">
+        <img id="dailyPhoto" alt="Daily Photo">
+      </div>
+    </div>
+
+    <!-- Live Photo -->
+    <div class="container">
+      <h2>Live Photo</h2>
+      <div class="photo-area">
+        <button id="captureBtn">Capture Now</button>
+        <div id="status" style="margin-top:10px; font-weight:bold;"></div>
+        <img id="realtimePhoto" alt="Live Photo">
+      </div>
+    </div>
+
+  </div>
+
+
+  <h1>Daily Photos — Latest GIF</h1>
+
+  <div class="card">
+    <div class="media">
+      <img id="latestGif" alt="latest gif">
+    </div>
+    <div class="caption">latest.gif · auto refresh every minute</div>
+  </div>
+
+
+  <script>
+    const API = window.location.origin;
+
+    const dailyPhoto = document.getElementById("dailyPhoto");
+    const realtimePhoto = document.getElementById("realtimePhoto");
+    const latestGif = document.getElementById("latestGif");
+    const captureBtn = document.getElementById("captureBtn");
+    const statusDiv = document.getElementById("status");
+
+    const GIF_PATH = "/static/daily_photos/latest.gif";
+
+    function loadDailyPhoto() {
+      fetch(`${API}/latest_daily_photo`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.filename) {
+            dailyPhoto.src =
+              `${API}/static/daily_photos/${data.filename}?t=${Date.now()}`;
+          }
+        });
+    }
+
+    function refreshGif() {
+      latestGif.src = `${API}${GIF_PATH}?t=${Date.now()}`;
+    }
+
+    captureBtn.addEventListener("click", () => {
+      captureBtn.disabled = true;
+      statusDiv.textContent = "Capturing...";
+
+      fetch(`${API}/capture`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            statusDiv.textContent = "Photo captured!";
+            realtimePhoto.src =
+              `${API}/static/realtime_photos/${data.filename}?t=${Date.now()}`;
+          } else {
+            statusDiv.textContent = "Capture failed";
+          }
+          captureBtn.disabled = false;
+        })
+        .catch(() => {
+          statusDiv.textContent = "Connection error";
+          captureBtn.disabled = false;
+        });
+    });
+
+    loadDailyPhoto();
+    refreshGif();
+  </script>
+
+</body>
+</html>
