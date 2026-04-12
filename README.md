@@ -78,14 +78,17 @@ crontab -e
 Run Server
 
 Start FastAPI server:
-
+```bash 
 uvicorn backend.app:app --host 0.0.0.0 --port 8000
+```
 Auto Start (systemd)
 
 Create service file:
-
+```bash
 sudo nano /etc/systemd/system/daily_camera.service
+```
 daily_camera.service
+
 [Unit]
 Description=Camera API
 After=network-online.target
@@ -98,9 +101,10 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target
-
+```
 Enable and start service:
-
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable daily_camera.service
 sudo systemctl start daily_camera.service
+```
