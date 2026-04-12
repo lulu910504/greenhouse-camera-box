@@ -88,7 +88,7 @@ Create service file:
 sudo nano /etc/systemd/system/daily_camera.service
 ```
 daily_camera.service
-
+```bash
 [Unit]
 Description=Camera API
 After=network-online.target
