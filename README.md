@@ -1,6 +1,6 @@
 # Greenhouse Camera System
 <img width="888" height="666" alt="image" src="https://github.com/user-attachments/assets/cae8f1d8-9edc-45e6-a767-127bc8aae625" />
-
+<img width="1108" height="1477" alt="image" src="https://github.com/user-attachments/assets/77e531ca-5ce0-4263-9bb0-76e7420ed961" />
 Raspberry Pi–based camera system for automated plant monitoring with remote access and API control.
 
 ## Overview
@@ -43,9 +43,25 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 ```cpp
 0 8 * * * python3 /path/to/scripts/daily_capture.py
 
-Start server:
+## Start server:
 ```cpp
 uvicorn app:app --host 0.0.0.0 --port 8000
+## Auto Start (systemd)
+```cpp
+sudo nano /etc/systemd/system/daily_camera.service
+### daily_camera.service
+```cpp
+[Unit]
+Description=RPi Camera FastAPI
+After=network-online.target
 
-<img width="1108" height="1477" alt="image" src="https://github.com/user-attachments/assets/77e531ca-5ce0-4263-9bb0-76e7420ed961" />
+[Service]
+User=pi
+WorkingDirectory=/home/pi/project
+ExecStart=/usr/bin/python3 -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
 
