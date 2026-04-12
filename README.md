@@ -17,7 +17,7 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 
 - Raspberry Pi 5
 - Camera Module 3 Wide
-- Case https://shop.playrobot.com/products/ceo0136
+- Raspberry Pi 5 CUBE Pi Case https://shop.playrobot.com/products/ceo0136
 ## Software Stack
 
 - Python
