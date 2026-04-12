@@ -68,5 +68,38 @@ Secure remote access without port forwarding.
 
 ## Automation (Cron)
 
-0 8 * * * python3 scripts/daily_capture.py
+Edit cron job:
 
+```bash
+crontab -e
+
+0 8 * * * python3 scripts/daily_capture.py
+Run Server
+
+Start FastAPI server:
+
+uvicorn backend.app:app --host 0.0.0.0 --port 8000
+Auto Start (systemd)
+
+Create service file:
+
+sudo nano /etc/systemd/system/daily_camera.service
+daily_camera.service
+[Unit]
+Description=Camera API
+After=network-online.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/project
+ExecStart=/usr/bin/python3 -m uvicorn backend.app:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+Enable and start service:
+
+sudo systemctl daemon-reload
+sudo systemctl enable daily_camera.service
+sudo systemctl start daily_camera.service
