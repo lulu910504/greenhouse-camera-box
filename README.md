@@ -17,7 +17,7 @@ All images are stored locally and served through a web interface.
 
 ## System Architecture
 
-Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard → Remote Access (Tailscale)
+Camera → Raspberry Pi → FastAPI → Local Storage → Remote Access (Tailscale)
 
 
 ## Hardware
