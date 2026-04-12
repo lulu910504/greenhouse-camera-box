@@ -74,6 +74,7 @@ Edit cron job:
 crontab -e
 
 0 8 * * * python3 scripts/daily_capture.py
+bash```
 Run Server
 
 Start FastAPI server:
