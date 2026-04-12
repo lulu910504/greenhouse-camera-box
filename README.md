@@ -34,5 +34,17 @@ Camera → Raspberry Pi → FastAPI → Local Storage → Dashboard / Remote Acc
 - REST API for remote control
 - Dashboard integration
 - Remote access via Tailscale
+- 
+## Tailscale
+<img width="1253" height="473" alt="image" src="https://github.com/user-attachments/assets/42483bf8-4207-4dc2-8fbd-d7eda2df4024" />
+
+
+## Automation
+```cpp
+0 8 * * * python3 /path/to/scripts/daily_capture.py
+
+Start server:
+```cpp
+uvicorn app:app --host 0.0.0.0 --port 8000
 <img width="1108" height="1477" alt="image" src="https://github.com/user-attachments/assets/77e531ca-5ce0-4263-9bb0-76e7420ed961" />
 
