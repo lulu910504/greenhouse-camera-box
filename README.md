@@ -8,6 +8,7 @@ Raspberry Pi–based camera system for automated plant monitoring with remote ac
 
 
 ## Overview
+<img width="611" height="301" alt="image" src="https://github.com/user-attachments/assets/d0f021a0-8cba-40a6-acb1-315f4bdbcc66" />
 
 This project implements a camera monitoring system designed for greenhouse environments.  
 Images are captured periodically and can also be triggered remotely via API.  
