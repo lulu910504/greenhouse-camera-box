@@ -110,3 +110,5 @@ sudo systemctl daemon-reload
 sudo systemctl enable daily_camera.service
 sudo systemctl start daily_camera.service
 ```
+<img width="328" height="704" alt="image" src="https://github.com/user-attachments/assets/49f36f70-19a4-4c0e-b9db-f5237ebaef2f" />
+
